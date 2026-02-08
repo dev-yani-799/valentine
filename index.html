@@ -2,93 +2,119 @@
 <html>
 <head>
     <title>For My Valentine</title>
-    <style>
-        body {
-            margin: 0;
-            text-align: center;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #ff758c, #ff7eb3);
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
-        }
+   <style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #ff758c, #ff7eb3);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-        /* Floating hearts */
-        .heart {
-            position: absolute;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 20px;
-            animation: float 6s linear infinite;
-        }
+.container {
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+}
 
-        @keyframes float {
-            0% {
-                transform: translateY(100vh);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-10vh);
-                opacity: 0;
-            }
-        }
+h1 {
+    font-size: clamp(24px, 5vw, 38px);
+    color: white;
+}
 
-        h1 {
-            margin-top: 100px;
-            font-size: 38px;
-            color: white;
-        }
+.buttons {
+    margin-top: 40px;
+    position: relative;
+    height: 120px;
+}
 
-        .btn {
-            padding: 15px 30px;
-            font-size: 20px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            position: absolute;
-            transition: 0.3s;
-        }
+.btn {
+    padding: 14px 28px;
+    font-size: 18px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    position: absolute;
+}
 
-        #yes {
-            background-color: #ff1744;
-            color: white;
-            left: 40%;
-            top: 60%;
-        }
+#yes {
+    background-color: #ff1744;
+    color: white;
+    left: 20%;
+}
 
-        #no {
-            background-color: #333;
-            color: white;
-            left: 55%;
-            top: 60%;
-        }
+#no {
+    background-color: #333;
+    color: white;
+    right: 20%;
+}
 
-        #result {
-            display: none;
-        }
+#result {
+    display: none;
+}
 
-        img {
-            width: 250px;
-            margin-top: 20px;
-        }
+img {
+    width: 80%;
+    max-width: 250px;
+    margin-top: 20px;
+}
 
-        #back {
-            padding: 10px 20px;
-            font-size: 16px;
-            background: white;
-            color: #ff1744;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-    </style>
+#back {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background: white;
+    color: #ff1744;
+    border-radius: 20px;
+    border: none;
+}
+
+/* Floating hearts */
+.heart {
+    position: absolute;
+    animation: float 6s linear infinite;
+    opacity: 0.7;
+}
+
+@keyframes float {
+    from {
+        transform: translateY(100vh);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-10vh);
+        opacity: 0;
+    }
+}
+
+/* Mobile tweaks */
+@media (max-width: 480px) {
+    .buttons {
+        height: 160px;
+    }
+    #yes {
+        left: 10%;
+    }
+    #no {
+        right: 10%;
+    }
+}
+</style>
+
 </head>
 <body>
 
+   <div class="container">
     <h1 id="question">Will You Be My Valentine & Love of My Life? 💖</h1>
 
-    <button id="yes" class="btn">Yes ❤️</button>
-    <button id="no" class="btn">No 😜</button>
+    <div class="buttons">
+        <button id="yes" class="btn">Yes ❤️</button>
+        <button id="no" class="btn">No 😜</button>
+    </div>
 
     <div id="result">
         <h1>You Are Mine Nowww Kuttuuuuuuuu.......💞🥰</h1>
@@ -96,9 +122,12 @@
         <br>
         <button id="back">Go Back 💕</button>
     </div>
-<audio id="bgMusic" autoplay loop preload="auto">
+</div>
+
+<audio id="bgMusic" loop preload="auto">
     <source src="jvkeher.mp3" type="audio/mpeg">
 </audio>
+
 <script>
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
@@ -111,17 +140,21 @@ const music = document.getElementById("bgMusic");
 // AUTO PLAY ON PAGE LOAD ONLY
 // -------------------------
 
-window.addEventListener("load", function () {
-    music.volume = 0.7;  // soft romantic volume
+function startMusic() {
+    music.volume = 0.7;
 
     const playPromise = music.play();
 
     if (playPromise !== undefined) {
         playPromise.catch(() => {
-            console.log("Autoplay blocked by browser.");
+            // If blocked (mobile), wait for first touch
+            document.addEventListener("touchstart", startMusic, { once: true });
         });
     }
-});
+}
+
+// Try autoplay on desktop
+window.addEventListener("load", startMusic);
 
 // -------------------------
 // Floating hearts
