@@ -96,10 +96,10 @@
         <br>
         <button id="back">Go Back 💕</button>
     </div>
-<audio id="bgMusic" loop preload="auto">
+<audio id="bgMusic" autoplay loop preload="auto">
     <source src="jvkeher.mp3" type="audio/mpeg">
 </audio>
-    <script>
+<script>
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
 const result = document.getElementById("result");
@@ -108,25 +108,20 @@ const backBtn = document.getElementById("back");
 const music = document.getElementById("bgMusic");
 
 // -------------------------
-// UNIVERSAL MUSIC HANDLER
+// AUTO PLAY ON PAGE LOAD ONLY
 // -------------------------
 
-function playMusic() {
-    if (music.paused) {
-        music.volume = 0.7; // set romantic soft volume
-        const playPromise = music.play();
+window.addEventListener("load", function () {
+    music.volume = 0.7;  // soft romantic volume
 
-        if (playPromise !== undefined) {
-            playPromise.catch(() => {
-                // If autoplay blocked, wait for user interaction
-                document.addEventListener("click", playMusic, { once: true });
-            });
-        }
+    const playPromise = music.play();
+
+    if (playPromise !== undefined) {
+        playPromise.catch(() => {
+            console.log("Autoplay blocked by browser.");
+        });
     }
-}
-
-// Try autoplay when page loads
-window.addEventListener("load", playMusic);
+});
 
 // -------------------------
 // Floating hearts
@@ -160,12 +155,10 @@ noBtn.addEventListener("mouseover", function() {
 });
 
 // -------------------------
-// YES click
+// YES click (NO music here)
 // -------------------------
 
 yesBtn.addEventListener("click", function() {
-    playMusic();
-
     question.style.display = "none";
     yesBtn.style.display = "none";
     noBtn.style.display = "none";
@@ -183,6 +176,7 @@ backBtn.addEventListener("click", function() {
     result.style.display = "none";
 });
 </script>
+
 
 </body>
 </html>
