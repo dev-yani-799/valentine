@@ -140,28 +140,21 @@ const music = document.getElementById("bgMusic");
 // AUTO PLAY ON PAGE LOAD ONLY
 // -------------------------
 
-function startMusicOnce() {
+function startMusic() {
     music.volume = 0.7;
 
     const playPromise = music.play();
 
     if (playPromise !== undefined) {
-        playPromise.catch(() => {});
+        playPromise.catch(() => {
+            // If blocked (mobile), wait for first touch
+            document.addEventListener("touchstart", startMusic, { once: true });
+        });
     }
-
-    // Remove listeners after first trigger
-    document.removeEventListener("click", startMusicOnce);
-    document.removeEventListener("touchstart", startMusicOnce);
 }
 
-// Try autoplay (desktop)
-window.addEventListener("load", () => {
-    music.play().catch(() => {});
-});
-
-// Fallback for ALL devices
-document.addEventListener("click", startMusicOnce);
-document.addEventListener("touchstart", startMusicOnce);
+// Try autoplay on desktop
+window.addEventListener("load", startMusic);
 
 // -------------------------
 // Floating hearts
