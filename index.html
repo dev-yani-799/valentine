@@ -4,17 +4,38 @@
     <title>My Valentine</title>
     <style>
         body {
+            margin: 0;
             text-align: center;
             font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
             height: 100vh;
             overflow: hidden;
+            position: relative;
+        }
+
+        /* Floating hearts */
+        .heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 20px;
+            animation: float 6s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh);
+                opacity: 0;
+            }
         }
 
         h1 {
             margin-top: 100px;
-            font-size: 40px;
-            color: #fff;
+            font-size: 38px;
+            color: white;
         }
 
         .btn {
@@ -24,17 +45,18 @@
             border-radius: 30px;
             cursor: pointer;
             position: absolute;
+            transition: 0.3s;
         }
 
         #yes {
-            background-color: #ff4d6d;
+            background-color: #ff1744;
             color: white;
-            left: 45%;
+            left: 40%;
             top: 60%;
         }
 
         #no {
-            background-color: #555;
+            background-color: #333;
             color: white;
             left: 55%;
             top: 60%;
@@ -42,18 +64,28 @@
 
         #result {
             display: none;
-            margin-top: 50px;
         }
 
         img {
             width: 250px;
             margin-top: 20px;
         }
+
+        #back {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: white;
+            color: #ff1744;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Will You Be My Valentine & Love of My Life? 💖</h1>
+    <h1 id="question">Will You Be My Valentine & Love of My Life? 💖</h1>
 
     <button id="yes" class="btn">Yes ❤️</button>
     <button id="no" class="btn">No 😜</button>
@@ -61,27 +93,56 @@
     <div id="result">
         <h1>You Are Mine Nowww 💞🥰</h1>
         <img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif" alt="hugging couple">
+        <br>
+        <button id="back">Go Back 💕</button>
     </div>
 
     <script>
         const noBtn = document.getElementById("no");
         const yesBtn = document.getElementById("yes");
         const result = document.getElementById("result");
+        const question = document.getElementById("question");
+        const backBtn = document.getElementById("back");
+
+        // Floating hearts generator
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.innerHTML = "💖";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.fontSize = (Math.random() * 20 + 15) + "px";
+            heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 6000);
+        }
+
+        setInterval(createHeart, 300);
 
         // Make NO button run away
         noBtn.addEventListener("mouseover", function() {
-            const x = Math.random() * window.innerWidth;
-            const y = Math.random() * window.innerHeight;
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 50);
             noBtn.style.left = x + "px";
             noBtn.style.top = y + "px";
         });
 
-        // When YES clicked
+        // YES click
         yesBtn.addEventListener("click", function() {
-            document.querySelector("h1").style.display = "none";
+            question.style.display = "none";
             yesBtn.style.display = "none";
             noBtn.style.display = "none";
             result.style.display = "block";
+        });
+
+        // Back button
+        backBtn.addEventListener("click", function() {
+            question.style.display = "block";
+            yesBtn.style.display = "block";
+            noBtn.style.display = "block";
+            result.style.display = "none";
         });
     </script>
 
